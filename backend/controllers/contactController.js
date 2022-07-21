@@ -1,7 +1,8 @@
 const Contact=require('../models/Contact')
 
 exports.addContact=async(req,res)=>{
-    const{name,email,age}=req.body
+    let {name,email,age}=req.body
+    age= Number(age)
     try {
         // check if email if already used
         const found=await Contact.findOne({email})
@@ -42,8 +43,10 @@ exports.deleteContact=async(req,res)=>{
 
 exports.updateContact=async(req,res)=>{
     const {id}=req.params
+  
     try {
         const updateContact = await Contact.findByIdAndUpdate(id,{$set:{...req.body}},{new:true});
+    
         res.status(200).send({msg:'contact updated',updateContact})
     } catch (error) {
         res.status(500).send('server error update')
